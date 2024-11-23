@@ -3,7 +3,6 @@ use std::{path::PathBuf, sync::Arc};
 use futures::future;
 use rustls::pki_types::CertificateDer;
 use structopt::StructOpt;
-use tokio::io::AsyncWriteExt;
 use tracing::{error, info};
 
 use h3_quinn::quinn;
@@ -147,10 +146,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
         // `recv_data()` must be called after `recv_response()` for
         // receiving potential response body
-        while let Some(mut chunk) = stream.recv_data().await? {
-            let mut out = tokio::io::stdout();
-            out.write_all_buf(&mut chunk).await?;
-            out.flush().await?;
+        while let Some(_) = stream.recv_data().await? {
+            // let mut out = tokio::io::stdout();
+            // out.write_all_buf(&mut chunk).await?;
+            // out.flush().await?;
         }
 
         Ok::<_, Box<dyn std::error::Error>>(())
